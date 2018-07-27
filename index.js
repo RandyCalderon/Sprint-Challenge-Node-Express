@@ -46,11 +46,20 @@ server.post('api/projects', async (req, res) => {
 
 server.get('/api/actions', async (req, res) => {
     try {
-        const id = req.params.id
-        const actionGet = await actionModel.get(id)
+        const actionGet = await actionModel.get()
         res.status(200).json(actionGet)
     } catch(err) {
 
+    }
+})
+
+server.get('/api/actions/:id', async (req, res) => {
+    try {   
+        const id = req.params.id
+        const actionGetId = await actionModel.get(id)
+        res.status(200).json(actionGetId)
+    } catch(err) {
+        res.status(500).json({error: "Unable to retrieve action data"})
     }
 })
 server.listen(8000)
