@@ -3,7 +3,6 @@ const server = express()
 
 const actionModel = require('./data/helpers/actionModel')
 const projectModel = require('./data/helpers/projectModel')
-const mappers = require('./data/helpers/mappers')
 
 server.use(express.json())
 
@@ -31,12 +30,16 @@ server.get('/api/projects/:id', async (req, res) => {
 })
 
 
-server.post('api/projects', async (req, res) => {
+server.post('api/projects/', async (req, res) => {
     try {
-        const projectInsert = await projectModel.insert(req.body)
-        res.status(200).json(projectInsert)
+        const {name, description} = req.body
+        if (name.length || description.length > 128) {
+            return res.status(400).json({error: "Exceeded 128 character limit for name or description"})
+        }
+        const insert = await projectModel.insert({name, description})
+        res.status(200).json(insert)
     } catch(err) {
-        
+        res.status(500).json({error: "There was an error while saving the project"})
     }
 })
 
