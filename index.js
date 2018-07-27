@@ -6,7 +6,9 @@ const actionModel = require('./data/helpers/actionModel')
 const projectModel = require('./data/helpers/projectModel')
 const mappers = require('./data/helpers/mappers')
 
-server.get('/api/project', async (req, res) => {
+
+// projectModel
+server.get('/api/projects', async (req, res) => {
     try {
         const getProject = await projectModel.get()
         res.status(200).json(getProject)
@@ -15,7 +17,7 @@ server.get('/api/project', async (req, res) => {
     }
 })
 
-server.get('/api/project/:id', async (req, res) => {
+server.get('/api/projects/:id', async (req, res) => {
     try {
         const id = req.params.id
         if (id === undefined) {
@@ -28,7 +30,8 @@ server.get('/api/project/:id', async (req, res) => {
     }
 })
 
-server.post('api/project', async (req, res) => {
+
+server.post('api/projects', async (req, res) => {
     try {
         const { name } = req.body
         const projectInsert = await projectModel.insert({name})
@@ -38,4 +41,16 @@ server.post('api/project', async (req, res) => {
     }
 })
 
+
+// actionModel
+
+server.get('/api/actions', async (req, res) => {
+    try {
+        const id = req.params.id
+        const actionGet = await actionModel.get(id)
+        res.status(200).json(actionGet)
+    } catch(err) {
+
+    }
+})
 server.listen(8000)
