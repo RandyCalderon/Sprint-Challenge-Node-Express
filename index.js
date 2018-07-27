@@ -81,7 +81,21 @@ server.put('api/actions/:id', async (req, res) => {
         const updateAction = await actionModel.update(id, {project_id, description, notes })
         res.status(200).json(updateAction)
     } catch(err) {
-
+        res.status(500).json({error: "Action couldn't be modified"})
     }
 })
+
+server.delete('/api/actions/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        if(actionRemove === 0) {
+            return res.status(500).json({error: "There was an error removing the action"})
+        }
+        const actionRemove = await actionModel.remove(id)
+        res.status(200).json(actionRemove)
+    } catch(err) {
+        res.status(404).json({error: "There was no action available for removal"})
+    }
+})
+
 server.listen(8000)
