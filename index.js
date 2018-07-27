@@ -30,7 +30,7 @@ server.get('/api/projects/:id', async (req, res) => {
 })
 
 
-server.post('api/projects/', async (req, res) => {
+server.post('/api/projects/', async (req, res) => {
     try {
         const {name, description} = req.body
         if (name.length || description.length > 128) {
@@ -40,6 +40,19 @@ server.post('api/projects/', async (req, res) => {
         res.status(200).json(insert)
     } catch(err) {
         res.status(500).json({error: "There was an error while saving the project"})
+    }
+})
+
+server.delete('/api/projects/:id', async (req, res) => {
+    try {
+        if (id === undefined) {
+            return res.status(404).json({error: "Id doesn't exist, removal is not possible"})
+        }
+        const { id } = req.params
+        const remove = await projectModel.remove(id)
+        res.status(200).json(remove)
+    } catch(err) {
+        res.status(500).json({error: "Project couldn't be removed"})
     }
 })
 
